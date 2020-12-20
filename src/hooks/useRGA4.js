@@ -1,6 +1,6 @@
 /** @module Hooks */
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { GAController } from '../ga4/GAController'
 import { injectRGA4 } from '../helpers/injectRGA4'
 
@@ -10,17 +10,17 @@ import { injectRGA4 } from '../helpers/injectRGA4'
  * @function
  * @private
  * @param {Array|Object} children - Children who will have the GA4 Singleton injected into their props
- * @param {Object} ga4 - GA4Singleton to inject into the children as props
+ * @param {Object} rga4 - GA4Singleton to inject into the children as props
  * @param {function} setChildren - callback to update the passed in props.children
  *
  * @returns {void}
  */
-const injectChildren = (children, ga4, setChildren) => {
+const injectChildren = (children, rga4, setChildren) => {
   return (
-    ga4 &&
+    rga4 &&
     children &&
     typeof setChildren === 'function' &&
-    setChildren(injectRGA4(children, ga4))
+    setChildren(injectRGA4(children, rga4))
   )
 }
 
@@ -37,9 +37,10 @@ const injectChildren = (children, ga4, setChildren) => {
  *
  * @returns {void}
  */
-const isInitialized = ({ children }, setChildren) => {
-  const ga4 = GAController.getInstance()
-  injectChildren(children, ga4, setChildren)
+const isInitialized = ({ children }, setChildren, setRGA4) => {
+  const rga4 = GAController.getInstance()
+  injectChildren(children, rga4, setChildren)
+  setRGA4(rga4)
 }
 
 /**
@@ -55,15 +56,16 @@ const isInitialized = ({ children }, setChildren) => {
  *
  * @returns {void}
  */
-const initializeGA4 = (props, setChildren) => {
+const initializeGA4 = (props, setChildren, setRGA4) => {
   const { code, config, gaCodes, children } = props
 
   const GA4Instance = new GAController(`${code}`, config, gaCodes)
 
   GA4Instance
     .initialize()
-    .then(ga4 => {
-      injectChildren(children, ga4, setChildren)
+    .then(rga4 => {
+      injectChildren(children, rga4, setChildren)
+      setRGA4(rga4)
     })
     .catch(err => {
       console.error(err.stack)
@@ -80,12 +82,19 @@ const initializeGA4 = (props, setChildren) => {
  * @param {Array|Object} props.children - Children who will have the GA4 Singleton injected into their props
  * @param {function} setChildren - callback to update the passed in props.children
  *
+ * @example
+ * const [ rga4 ]
+ *
  * @returns {void}
  */
-export const useRGA4Initialize = (props, setChildren) => {
+export const useRGA4 = (props, setChildren) => {
+  const [ rga4, setRGA4 ] = useState(GAController.getInstance())
+
   useEffect(() => {
     GAController.isInitialized()
-      ? isInitialized(props, setChildren)
-      : initializeGA4(props, setChildren)
+      ? isInitialized(props, setChildren, setRGA4)
+      : initializeGA4(props, setChildren, setRGA4)
   }, [])
+  
+  return [ rga4, setRGA4 ]
 }

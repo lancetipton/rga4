@@ -21,12 +21,12 @@ React Components and hooks for integrating Google Analytics 4 into an applicatio
     import React, { useEffect } from 'react'
     import { RGA4 } from '@lancetipton/rga4'
 
-    const Child = ({ ga4, ...props }) => {
+    const Child = ({ rga4, ...props }) => {
 
       useEffect(() => {
 
-        // Call an analytics events with the ga4 prop
-        ga4.event('page_view', {
+        // Call an analytics events with the rga4 prop
+        rga4.event('page_view', {
           event_label: 'Github Readme',
           event_category: 'engagement',
           non_interaction: true,

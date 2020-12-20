@@ -5,7 +5,7 @@
 
 
 import React, { useState } from 'react'
-import { useRGA4Initialize } from '../hooks/useRGA4Initialize'
+import { useRGA4 } from '../hooks/useRGA4'
 
 /**
  * @desc Helper component to initialize google analytics 4
@@ -23,7 +23,7 @@ import { useRGA4Initialize } from '../hooks/useRGA4Initialize'
 export const RGA4 = props => {
   const [components, setComponents] = useState(null)
 
-  useRGA4Initialize(props, setComponents)
+  useRGA4(props, setComponents)
 
   return React.createElement(React.Fragment, null, components)
 }

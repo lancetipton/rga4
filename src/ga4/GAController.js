@@ -148,11 +148,11 @@ GAController.isInitialized = () => {
  * @function
  * @memberof GAController
  * @static
- *
+ * @param {boolean} showWarn - Show warning when singleton is not initialized
  * @returns {Object} - GA4Singleton
  */
-GAController.getInstance = () => {
+GAController.getInstance = (showWarn) => {
   return GAController.isInitialized()
     ? GA4Singleton
-    : console.warn('Google Analytics is not initialized')
+    : showWarn && console.warn('Google Analytics is not initialized')
 }

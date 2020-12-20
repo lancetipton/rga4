@@ -1,7 +1,7 @@
 /** @module HOCs */
 
 import React from 'react'
-import { usePageView } from '../hooks/usePageView'
+import { useRGA4 } from '../hooks/useRGA4'
 
 /**
  * Higher order component to initialized GA4, then automatically fire a page view event
@@ -21,14 +21,15 @@ import { usePageView } from '../hooks/usePageView'
  *
  * @returns {function} - HOC Wrapper around the passed int component
  */
-export const withPageView = Component => {
-  const PageViewHoc = props => {
-    const { location, title, gaCode } = props
-    usePageView({ location, title, gaCode })
-    return <Component {...props} />
+export const withRGA4 = Component => {
+  const RGA4Hoc = props => {
+    const { gaCode } = props
+    const rga4 = useRGA4({ gaCode })
+
+    return <Component {...props} rga4={rga4} />
   }
   const displayName = Component.displayName || Component.name || 'Component'
-  PageViewHoc.displayName = `WithPageView(${displayName})`
+  RGA4Hoc.displayName = `WithRGA4(${displayName})`
 
-  return PageViewHoc
+  return RGA4Hoc
 }
