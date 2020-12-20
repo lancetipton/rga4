@@ -83,7 +83,10 @@ const initializeGA4 = (props, setChildren, setRGA4) => {
  * @param {function} setChildren - callback to update the passed in props.children
  *
  * @example
- * const [ rga4 ]
+ * const [ rga4 ] = useRGA4({ code: '<Google Analytic Measurement ID>' })
+ *
+ * // Fire an analytics event
+ * rga4.event('<Event-Name>', { ...Analytic event properties })
  *
  * @returns {void}
  */

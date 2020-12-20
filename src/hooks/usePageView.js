@@ -50,6 +50,7 @@ const initializeGA4 = ({ gaCode, ...options }) => {
  * @param {string} options.title - Current page title
  * @param {string} options.gaCode - Google Analytic Measurement ID
  *
+ *
  * @returns {void}
  */
 export const usePageView = options =>
