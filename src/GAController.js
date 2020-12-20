@@ -1,17 +1,52 @@
-import { buildScriptTags } from './helpers/buildScriptTags'
+/**
+ * @module GAController
+ * @import {GAController, GA4Singleton, PageViewEvent, UAEvent} from './typeDefs'
+ */
 
-export const GA4Singleton = {}
+import { buildScriptTags } from './helpers/buildScriptTags'
+import { mapEventKeys } from './helpers/mapEventKeys'
 
 /**
- * GAController
- * Class required to manage google analytics 4
- * @class GAController
- * @param {string} gaCode - Google Analytic 4 Measurement ID
- * @param {string} options - Custom analytic config options
+ * Sets the singleton to initialized, and adds methods
+ * @memberof GAController
+ * @function
+ * @private
+ * @param {string} override - Name of method that should be overwritten
  *
- * @returns {Class Instance|Object} GAController instance
+ * @returns {function} - Method to log an override error
+ */
+const noOpOverride = override => {
+  return () => {
+    console.error(`Method ${override} should be overwritten with GAController instance method!`)
+  }
+}
+
+/**
+ * @type {GA4Singleton}
+ * @export
+ */
+export const GA4Singleton = {
+  initialized: false,
+  gtag: noOpOverride('GAController#gtag'),
+  uaEvent: noOpOverride('GAController#uaEvent'),
+  pageview: noOpOverride('GAController#pageview'),
+  event: noOpOverride('GAController#event'),
+}
+
+/**
+ * @type GAController
+ * @class GAController
+ * @desc Class required to manage google analytics 4
+ * @export
+ * @param {string} gaCode - Google Analytic 4 Measurement ID
+ * @param {string} [options={}] - Custom analytic config options
+ * @param {string} options.gaCodes - Additional Measurement IDs
+ * @private
+ *
+ * @returns {GAController} GAController instance
  */
 export class GAController {
+
   constructor(gaCode, options = {}) {
     const { gaCodes, ...config } = options
     this.config = config
@@ -22,6 +57,8 @@ export class GAController {
 
   /**
    * Sets the singleton to initialized, and adds methods
+   * @memberof GAController
+   * @instance
    * @function
    *
    * @returns {Object} GA4Singleton
@@ -31,6 +68,7 @@ export class GAController {
       initialized: true,
       pageview: this.pageview,
       event: this.event,
+      customEvent: this.customEvent,
       gtag: this.gtag,
     })
 
@@ -38,7 +76,10 @@ export class GAController {
   }
 
   /**
-   * Return main function for send ga4 events, pageview etc
+   * Builds the google analytics scripts tags
+   * Then initializes and returns the GA4Singleton object
+   * @memberof GAController
+   * @instance
    * @function
    *
    * @returns {Class} GAController instance
@@ -52,55 +93,55 @@ export class GAController {
   }
 
   /**
-   * Send pageview event to gtag
+   * Shortcut helper so send a page view event
    * @function
-   * @param {string} path - Name of the action for the event
-   * @param {string} location - Extra string identifier of the event
-   * @param {string} title - Group the event belongs to
+   * @memberof GAController
+   * @instance
+   * @param {PageViewEvent} event
    *
    * @returns {*} Response from the global gtag method
    */
-  pageview = (path, location, title) => {
-    return this.gtag('event', 'page_view', {
-      page_path: path,
-      page_location: location || window.location,
-      page_title: title || document.title,
-    })
+  pageView = ({ location=window.location, title=document.title }) => {
+    const event = mapEventKeys({ location, title }, 'PAGE_VIEW')
+
+    return this.gtag('event', 'page_view', event)
   }
 
   /**
    * Build a predefined event and send to gtag
    * @function
-   * @param {string} action - Name of the action for the event
-   * @param {string} label - Extra string identifier of the event
-   * @param {string} category - Group the event belongs to
-   * @param {boolan} [nonInteraction=false] - True if event was not fired from user interaction
+   * @memberof GAController
+   * @instance
+   * @param {UAEvent} event
    *
    * @returns {*} Response from the global gtag method
    */
-  event = (action, label, category, nonInteraction = false) => {
-    return this.gtag('event', action, {
-      event_label: label,
-      event_category: category,
-      non_interaction: nonInteraction,
-    })
+  uaEvent = event => {
+    const { action, ...eventData } = event
+    const uaEvent = mapEventKeys(eventData, 'UA_EVENT_PROPS')
+
+    return this.gtag('event', action, uaEvent)
   }
 
   /**
    * Build event and send to gtag
    * @function
-   * @param {string} action - Name of the action for the event
-   * @param {Object} props - Properties of the custom event
+   * @memberof GAController
+   * @instance
+   * @param {string} name - What the event should be called
+   * @param {Object} props - Key/values pairs of properties of the event
    *
    * @returns {*} Response from the global gtag method
    */
-  customEvent = (action, props = {}) => {
-    return this.gtag('event', action, props)
+  event = (name, props = {}) => {
+    return this.gtag('event', name, props)
   }
 
   /**
    * Direct access to ga
    * @function
+   * @memberof GAController
+   * @instance
    * @param {Object} args - Arguments for the global ga method
    *
    * @returns {*} Response from the global ga method
@@ -109,6 +150,9 @@ export class GAController {
 
   /**
    * Direct access to gtag
+   * @function
+   * @memberof GAController
+   * @instance
    * @param {Object} args - Arguments for the global gtag method
    *
    * @returns {*} Response from the global gtag method
@@ -119,6 +163,8 @@ export class GAController {
 /**
  * Check if google analytics is initialized
  * @function
+ * @memberof GAController
+ * @static
  *
  * @returns {boolean} - True if google analytics is initialized
  */
@@ -129,6 +175,8 @@ GAController.isInitialized = () => {
 /**
  * Get RGA4 singleton instance if it's initialized
  * @function
+ * @memberof GAController
+ * @static
  *
  * @returns {Object} - GA4Singleton
  */

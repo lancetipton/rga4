@@ -1,9 +1,13 @@
+/** @module Hooks */
+
 import { useEffect } from 'react'
 import { GAController } from '../GAController'
 
 /**
  * Fires a page view event when called
  * @function
+ * @memberof Hooks
+ * @private
  * @param {Object} options - Data for the page view event
  * @param {string} options.path - Current page path
  * @param {string} options.location - Current page location
@@ -19,6 +23,8 @@ const isInitialized = ({ path, location, title }) => {
 /**
  * Initializes GA4, then fires a page view event when called
  * @function
+ * @memberof Hooks
+ * @private
  * @param {Object} options - Data for the page view event
  * @param {string} options.path - Current page path
  * @param {string} options.location - Current page location
@@ -42,6 +48,8 @@ const initializeGA4 = ({ path, location, title, gaCode }) => {
 /**
  * Custom hook to initialized GA4, then fire a page view event
  * @function
+ * @memberof Hooks
+ * @export
  * @param {Object} options - Data for the page view event
  * @param {string} options.path - Current page path
  * @param {string} options.location - Current page location

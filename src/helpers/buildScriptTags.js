@@ -1,12 +1,19 @@
+/**
+ * @module Helpers
+ * @import {GAController} from './typeDefs'
+ */
+ 
 import { buildContentScript } from './buildContentScript'
 
 /**
  * Builds the onload event listener for the Google Analytics Script Dom element
  * <br/> Returns a method that creates the GA4Singleton and sets initialized to true
  * @function
+ * @memberof Helpers
+ * @private
  * @param {string} gaCode - Google Analytic Measurement ID
  *
- * @returns {Dom Node|Object} GAScript - Google Analytics Script Dom element
+ * @returns {Object} GAScript - Google Analytics Script Dom element
  */
 const createGAScript = gaCode => {
   const GAScript = document.createElement('script')
@@ -24,8 +31,10 @@ const createGAScript = gaCode => {
  * <br/> Returns a method that creates the GA4Singleton and sets initialized to true
  * <br/> Method also creates another Script dom node that initializes gtag
  * @function
- * @param {Class Instance|Object} GA4Instance - Instance of the GAController class
- * @param {Dom Node|Object} head - Current documents Head Dom element
+ * @memberof Helpers
+ * @private
+ * @param {GAController} GA4Instance - Instance of the GAController class
+ * @param {Object} head - Current documents Head Dom element
  * @param {function} resolve - Resolves the GA4Instance.initialize method
  *
  * @returns {function} - Method to be called when onload event is fired
@@ -44,6 +53,8 @@ const buildOnloadEvent = (GA4Instance, head, resolve) => {
  * Builds the onerror event listener for the Google Analytics Script Dom element
  * <br/> Returns a method that calls the GA4Instance.initialize reject method
  * @function
+ * @memberof Helpers
+ * @private
  * @param {function} reject - Rejects the GA4Instance.initialize method
  *
  * @returns {function} - Method to be called when onerror event is fired
@@ -57,9 +68,11 @@ const buildOnErrorEvent = reject => {
 /**
  * Adds onload and onerror event listeners to the Google Analytics Script Dom element
  * @function
- * @param {Class Instance|Object} GA4Instance - Instance of the GAController class
- * @param {Dom Node|Object} GAScript - Google Analytics Script Dom element
- * @param {Dom Node|Object} head - Current documents Head Dom element
+ * @memberof Helpers
+ * @private
+ * @param {GAController} GA4Instance - Instance of the GAController class
+ * @param {Object} GAScript - Google Analytics Script Dom element
+ * @param {Object} head - Current documents Head Dom element
  * @param {function} resolve - Resolves the GA4Instance.initialize method
  * @param {function} reject - Rejects the GA4Instance.initialize method
  *
@@ -74,8 +87,10 @@ const addScriptEvents = (GA4Instance, GAScript, head, resolve, reject) => {
  * Adds listener to the document.readyState
  * <br> When called adds the Google Analytics script to the dom
  * @function
- * @param {Dom Node|Object} GAScript - Google Analytics Script Dom element
- * @param {Dom Node|Object} head - Current documents Head Dom element
+ * @memberof Helpers
+ * @private
+ * @param {Object} GAScript - Google Analytics Script Dom element
+ * @param {Object} head - Current documents Head Dom element
  *
  * @returns {void}
  */
@@ -88,7 +103,10 @@ const addOnReadyEvent = (GAScript, head) => {
 /**
  * Builds the script tags required to set up Google Analytics 4
  * @function
- * @param {Class Instance|Object} GA4Instance - Instance of the GAController class
+ * @memberof Helpers
+ * @export
+ * @private
+ * @param {GAController} GA4Instance - Instance of the GAController class
  * @param {function} resolve - Resolves the GA4Instance.initialize method
  * @param {function} reject - Rejects the GA4Instance.initialize method
  *

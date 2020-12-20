@@ -1,3 +1,5 @@
+/** @module Hooks */
+
 import { useEffect } from 'react'
 import { GAController } from '../GAController'
 import { injectRGA4 } from '../helpers/injectRGA4'
@@ -6,6 +8,8 @@ import { injectRGA4 } from '../helpers/injectRGA4'
  * Validates the passed in arguments, then makes call to inject the children with GA4 Singleton
  * <br/> Calls the setChildren method if it's a function
  * @function
+ * @memberof Hooks
+ * @private
  * @param {Array|Object} children - Children who will have the GA4 Singleton injected into their props
  * @param {Object} ga4 - GA4Singleton to inject into the children as props
  * @param {function} setChildren - callback to update the passed in props.children
@@ -24,6 +28,8 @@ const injectChildren = (children, ga4, setChildren) => {
 /**
  * Gets GA4Singleton, then injects it into the children's props
  * @function
+ * @memberof Hooks
+ * @private
  * @param {Object} props - Data to initialize Google Analytic 4
  * @param {string} props.code - Main Google Analytic Measurement ID
  * @param {Object} props.config - Config options for gtag method call
@@ -41,6 +47,8 @@ const isInitialized = ({ children }, setChildren) => {
 /**
  * Initializes GA4, then injects the GA4Singleton into the children's props
  * @function
+ * @memberof Hooks
+ * @private
  * @param {Object} props - Data to initialize Google Analytic 4
  * @param {string} props.code - Main Google Analytic Measurement ID
  * @param {Object} props.config - Config options for gtag method call
@@ -68,6 +76,7 @@ const initializeGA4 = (props, setChildren) => {
 /**
  * Custom hook to initialized GA4
  * @function
+ * @memberof Hooks
  * @param {Object} props - Data to initialize Google Analytic 4
  * @param {string} props.code - Main Google Analytic Measurement ID
  * @param {Object} props.config - Config options for gtag method call

@@ -1,12 +1,20 @@
+/**
+ * @module Helpers
+ * @import {Component} from './typeDefs'
+ */
+
 import React, { createElement, Fragment, isValidElement } from 'react'
 
 /**
  * Renders the passed in component based it's type
  * @function
- * @param {React Component} Component - Component to be rendered
+ * @memberof Helpers
+ * @private
+ * @export
+ * @param {Component} Component - Component to be rendered
  * @param {Object} props - Props to pass to the Component when rendered
  *
- * @returns {React Component} - React component in the correct render format
+ * @returns {Component} - React component in the correct render format
  */
 export const renderFromType = (Component, props) => {
   return isValidElement(Component) ? (

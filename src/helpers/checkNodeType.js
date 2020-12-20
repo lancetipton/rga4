@@ -1,6 +1,11 @@
+/** @module Helpers */
+
 /**
  * Checks a nodes type and type.name to ensure it exists
  * @function
+ * @memberof Helpers
+ * @private
+ * @export
  * @param {Object} node - Node to be validated
  *
  * @returns {boolean} - True if node.type.name is not undefined
