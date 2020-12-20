@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>hooks/useRGA4.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="GAController.html">GAController</a><ul class='methods'><li data-type='method'><a href="GAController.html#.getInstance">getInstance</a></li><li data-type='method'><a href="GAController.html#.isInitialized">isInitialized</a></li><li data-type='method'><a href="GAController.html#event">event</a></li><li data-type='method'><a href="GAController.html#ga">ga</a></li><li data-type='method'><a href="GAController.html#gtag">gtag</a></li><li data-type='method'><a href="GAController.html#initialize">initialize</a></li><li data-type='method'><a href="GAController.html#pageView">pageView</a></li><li data-type='method'><a href="GAController.html#setSingleton">setSingleton</a></li><li data-type='method'><a href="GAController.html#uaEvent">uaEvent</a></li></ul></li></ul><h3>Modules</h3><ul><li><a href="module-Components.html">Components</a><ul class='methods'><li data-type='method'><a href="module-Components.html#.RGA4">RGA4</a></li><li data-type='method'><a href="module-Components.html#.RGA4Injector">RGA4Injector</a></li></ul></li><li></li><li><a href="module-HOCs.html">HOCs</a><ul class='methods'><li data-type='method'><a href="module-HOCs.html#.withPageView">withPageView</a></li><li data-type='method'><a href="module-HOCs.html#.withRGA4">withRGA4</a></li></ul></li><li></li><li><a href="module-Hooks.html">Hooks</a><ul class='methods'><li data-type='method'><a href="module-Hooks.html#.usePageView">usePageView</a></li><li data-type='method'><a href="module-Hooks.html#.useRGA4">useRGA4</a></li></ul></li><li></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">hooks/useRGA4.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** @module Hooks */
+
+import { useEffect, useState } from 'react'
+import { GAController } from '../ga4/GAController'
+import { injectRGA4 } from '../helpers/injectRGA4'
+
+/**
+ * Validates the passed in arguments, then makes call to inject the children with GA4 Singleton
+ * &lt;br/> Calls the setChildren method if it's a function
+ * @function
+ * @private
+ * @param {Array|Object} children - Children who will have the GA4 Singleton injected into their props
+ * @param {Object} rga4 - GA4Singleton to inject into the children as props
+ * @param {function} setChildren - callback to update the passed in props.children
+ *
+ * @returns {void}
+ */
+const injectChildren = (children, rga4, setChildren) => {
+  return (
+    rga4 &amp;&amp;
+    children &amp;&amp;
+    typeof setChildren === 'function' &amp;&amp;
+    setChildren(injectRGA4(children, rga4))
+  )
+}
+
+/**
+ * Gets GA4Singleton, then injects it into the children's props
+ * @function
+ * @private
+ * @param {Object} props - Data to initialize Google Analytic 4
+ * @param {string} props.code - Main Google Analytic Measurement ID
+ * @param {Object} props.config - Config options for gtag method call
+ * @param {Array} props.gaCodes - Extra GA4 Measurement ID's
+ * @param {Array|Object} props.children - Children who will have the GA4 Singleton injected into their props
+ * @param {function} setChildren - callback to update the passed in props.children
+ *
+ * @returns {void}
+ */
+const isInitialized = ({ children }, setChildren, setRGA4) => {
+  const rga4 = GAController.getInstance()
+  injectChildren(children, rga4, setChildren)
+  setRGA4(rga4)
+}
+
+/**
+ * Initializes GA4, then injects the GA4Singleton into the children's props
+ * @function
+ * @private
+ * @param {Object} props - Data to initialize Google Analytic 4
+ * @param {string} props.code - Main Google Analytic Measurement ID
+ * @param {Object} props.config - Config options for gtag method call
+ * @param {Array} props.gaCodes - Extra GA4 Measurement ID's
+ * @param {Array|Object} props.children - Children who will have the GA4 Singleton injected into their props
+ * @param {function} setChildren - callback to update the passed in props.children
+ *
+ * @returns {void}
+ */
+const initializeGA4 = (props, setChildren, setRGA4) => {
+  const { code, config, gaCodes, children } = props
+
+  const GA4Instance = new GAController(`${code}`, config, gaCodes)
+
+  GA4Instance.initialize()
+    .then(rga4 => {
+      injectChildren(children, rga4, setChildren)
+      setRGA4(rga4)
+    })
+    .catch(err => {
+      console.error(err.stack)
+    })
+}
+
+/**
+ * Custom hook to initialized GA4
+ * @function
+ * @param {Object} props - Data to initialize Google Analytic 4
+ * @param {string} props.code - Main Google Analytic Measurement ID
+ * @param {Object} props.config - Config options for gtag method call
+ * @param {Array} props.gaCodes - Extra GA4 Measurement ID's
+ * @param {Array|Object} props.children - Children who will have the GA4 Singleton injected into their props
+ * @param {function} setChildren - callback to update the passed in props.children
+ *
+ * @example
+ * const [ rga4 ] = useRGA4({ code: '&lt;Google Analytic Measurement ID>' })
+ *
+ * // Fire an analytics event
+ * rga4.event('&lt;Event-Name>', { ...Analytic event properties })
+ *
+ * @returns {void}
+ */
+export const useRGA4 = (props, setChildren) => {
+  const [rga4, setRGA4] = useState(GAController.getInstance())
+
+  useEffect(() => {
+    GAController.isInitialized()
+      ? isInitialized(props, setChildren, setRGA4)
+      : initializeGA4(props, setChildren, setRGA4)
+  }, [])
+
+  return [rga4, setRGA4]
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Sun Dec 20 2020 04:02:34 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

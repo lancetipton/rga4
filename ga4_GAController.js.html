@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>ga4/GAController.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="GAController.html">GAController</a><ul class='methods'><li data-type='method'><a href="GAController.html#.getInstance">getInstance</a></li><li data-type='method'><a href="GAController.html#.isInitialized">isInitialized</a></li><li data-type='method'><a href="GAController.html#event">event</a></li><li data-type='method'><a href="GAController.html#ga">ga</a></li><li data-type='method'><a href="GAController.html#gtag">gtag</a></li><li data-type='method'><a href="GAController.html#initialize">initialize</a></li><li data-type='method'><a href="GAController.html#pageView">pageView</a></li><li data-type='method'><a href="GAController.html#setSingleton">setSingleton</a></li><li data-type='method'><a href="GAController.html#uaEvent">uaEvent</a></li></ul></li></ul><h3>Modules</h3><ul><li><a href="module-Components.html">Components</a><ul class='methods'><li data-type='method'><a href="module-Components.html#.RGA4">RGA4</a></li><li data-type='method'><a href="module-Components.html#.RGA4Injector">RGA4Injector</a></li></ul></li><li></li><li><a href="module-HOCs.html">HOCs</a><ul class='methods'><li data-type='method'><a href="module-HOCs.html#.withPageView">withPageView</a></li><li data-type='method'><a href="module-HOCs.html#.withRGA4">withRGA4</a></li></ul></li><li></li><li><a href="module-Hooks.html">Hooks</a><ul class='methods'><li data-type='method'><a href="module-Hooks.html#.usePageView">usePageView</a></li><li data-type='method'><a href="module-Hooks.html#.useRGA4">useRGA4</a></li></ul></li><li></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">ga4/GAController.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @import {GA4Singleton, PageViewEvent, UAEvent} from '../typeDefs'
+ */
+
+import { buildScriptTags } from '../helpers/buildScriptTags'
+import { mapEventKeys } from '../helpers/mapEventKeys'
+import { GA4Singleton } from './GA4Singleton'
+
+/**
+ * @class GAController
+ * @desc Class required to manage google analytics 4
+ * @export
+ * @param {string} gaCode - Google Analytic 4 Measurement ID
+ * @param {string} [options={}] - Custom analytic config options
+ * @param {string} options.gaCodes - Additional Measurement IDs
+ *
+ * @returns {GAController} GAController instance
+ */
+export class GAController {
+  constructor(gaCode, options = {}) {
+    const { gaCodes, ...config } = options
+    this.config = config
+    this.gaCode = gaCode
+    this.extraGaCodes = gaCodes || []
+    this.initialized = false
+  }
+
+  /**
+   * Sets the singleton to initialized, and adds methods
+   * @memberof GAController
+   * @instance
+   * @function
+   *
+   * @returns {Object} GA4Singleton
+   */
+  setSingleton = () => {
+    Object.assign(GA4Singleton, {
+      initialized: true,
+      pageView: this.pageView,
+      uaEvent: this.uaEvent,
+      event: this.event,
+      gtag: this.gtag,
+    })
+
+    return GA4Singleton
+  }
+
+  /**
+   * Builds the google analytics scripts tags
+   * Then initializes and returns the GA4Singleton object
+   * @memberof GAController
+   * @instance
+   * @function
+   *
+   * @returns {Class} GAController instance
+   */
+  initialize = () => {
+    return new Promise((resolve, reject) => {
+      GAController.isInitialized()
+        ? reject(new Error('Google Analytics has already been initialized!'))
+        : buildScriptTags(this, resolve, reject)
+    })
+  }
+
+  /**
+   * Shortcut helper so send a page view event
+   * @function
+   * @memberof GAController
+   * @instance
+   * @param {PageViewEvent} event
+   *
+   * @returns {*} Response from the global gtag method
+   */
+  pageView = ({ location = window.location, title = document.title }) => {
+    const event = mapEventKeys({ location, title }, 'PAGE_VIEW')
+
+    return this.gtag('event', 'page_view', event)
+  }
+
+  /**
+   * Build a predefined event and send to gtag
+   * @function
+   * @memberof GAController
+   * @instance
+   * @param {UAEvent} event
+   *
+   * @returns {*} Response from the global gtag method
+   */
+  uaEvent = event => {
+    const { action, ...eventData } = event
+    const uaEvent = mapEventKeys(eventData, 'UA_EVENT_PROPS')
+
+    return this.gtag('event', action, uaEvent)
+  }
+
+  /**
+   * Build event and send to gtag
+   * @function
+   * @memberof GAController
+   * @instance
+   * @param {string} name - What the event should be called
+   * @param {Object} props - Key/values pairs of properties of the event
+   *
+   * @returns {*} Response from the global gtag method
+   */
+  event = (name, props = {}) => {
+    return this.gtag('event', name, props)
+  }
+
+  /**
+   * Direct access to ga
+   * @function
+   * @memberof GAController
+   * @instance
+   * @param {Object} args - Arguments for the global ga method
+   *
+   * @returns {*} Response from the global ga method
+   */
+  ga = (...args) => window.ga(...args)
+
+  /**
+   * Direct access to gtag
+   * @function
+   * @memberof GAController
+   * @instance
+   * @param {Object} args - Arguments for the global gtag method
+   *
+   * @returns {*} Response from the global gtag method
+   */
+  gtag = (...args) => window.gtag(...args)
+}
+
+/**
+ * Check if google analytics is initialized
+ * @function
+ * @memberof GAController
+ * @static
+ *
+ * @returns {boolean} - True if google analytics is initialized
+ */
+GAController.isInitialized = () => {
+  return GA4Singleton.initialized
+}
+
+/**
+ * Get RGA4 singleton instance if it's initialized
+ * @function
+ * @memberof GAController
+ * @static
+ * @param {boolean} showWarn - Show warning when singleton is not initialized
+ * @returns {Object} - GA4Singleton
+ */
+GAController.getInstance = showWarn => {
+  return GAController.isInitialized()
+    ? GA4Singleton
+    : showWarn &amp;&amp; console.warn('Google Analytics is not initialized')
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Sun Dec 20 2020 04:02:34 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>
