@@ -15,17 +15,15 @@ const noOpObj = {}
  *
  * @returns {*} Response from the global gtag method
  */
-const getEventKeyMap = eventKeyMap => {
+const getEventKeyMap = (eventKeyMap) => {
   return typeof eventKeyMap === 'string'
     ? EVENT_MAP[eventKeyMap]
-    : typeof eventKeyMap === 'object'
-      ? eventKeyMap
-      : noOpObj
+    : eventKeyMap
 }
 
 /**
  * Maps a user defined event object to the keys in the eventKeyMap
- * Ensures correct keys are used to for the event 
+ * Ensures correct keys are used to for the event
  * @function
  * @private
  * @param {Object} eventObj - Used defined key/value pairs for and event
@@ -36,11 +34,10 @@ const getEventKeyMap = eventKeyMap => {
 export const mapEventKeys = (eventObj, eventKeyMap) => {
   const keyMap = getEventKeyMap(eventKeyMap)
 
-  return Object.entries(keyMap)
-    .reduce((mappedObj, [ eventKey, gaKey ]) => {
-      if (eventKey === 'value' && eventObj[eventKey] < 0) return mappedObj
-      else eventObj[eventKey] && (mappedObj[gaKey] = eventObj[eventKey])
+  return Object.entries(keyMap).reduce((mappedObj, [eventKey, gaKey]) => {
+    if (eventKey === 'value' && eventObj[eventKey] < 0) return mappedObj
+    else eventObj[eventKey] && (mappedObj[gaKey] = eventObj[eventKey])
 
-      return mappedObj
-    }, {})
+    return mappedObj
+  }, {})
 }

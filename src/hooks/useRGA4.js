@@ -61,8 +61,7 @@ const initializeGA4 = (props, setChildren, setRGA4) => {
 
   const GA4Instance = new GAController(`${code}`, config, gaCodes)
 
-  GA4Instance
-    .initialize()
+  GA4Instance.initialize()
     .then(rga4 => {
       injectChildren(children, rga4, setChildren)
       setRGA4(rga4)
@@ -91,13 +90,13 @@ const initializeGA4 = (props, setChildren, setRGA4) => {
  * @returns {void}
  */
 export const useRGA4 = (props, setChildren) => {
-  const [ rga4, setRGA4 ] = useState(GAController.getInstance())
+  const [rga4, setRGA4] = useState(GAController.getInstance())
 
   useEffect(() => {
     GAController.isInitialized()
       ? isInitialized(props, setChildren, setRGA4)
       : initializeGA4(props, setChildren, setRGA4)
   }, [])
-  
-  return [ rga4, setRGA4 ]
+
+  return [rga4, setRGA4]
 }

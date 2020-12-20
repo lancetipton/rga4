@@ -1,7 +1,7 @@
 /**
  * @import {Component} from './typeDefs'
  */
- 
+
 import { checkNodeType } from './checkNodeType'
 import {
   Children,

@@ -17,7 +17,6 @@ import { GA4Singleton } from './GA4Singleton'
  * @returns {GAController} GAController instance
  */
 export class GAController {
-
   constructor(gaCode, options = {}) {
     const { gaCodes, ...config } = options
     this.config = config
@@ -72,7 +71,7 @@ export class GAController {
    *
    * @returns {*} Response from the global gtag method
    */
-  pageView = ({ location=window.location, title=document.title }) => {
+  pageView = ({ location = window.location, title = document.title }) => {
     const event = mapEventKeys({ location, title }, 'PAGE_VIEW')
 
     return this.gtag('event', 'page_view', event)
@@ -151,7 +150,7 @@ GAController.isInitialized = () => {
  * @param {boolean} showWarn - Show warning when singleton is not initialized
  * @returns {Object} - GA4Singleton
  */
-GAController.getInstance = (showWarn) => {
+GAController.getInstance = showWarn => {
   return GAController.isInitialized()
     ? GA4Singleton
     : showWarn && console.warn('Google Analytics is not initialized')

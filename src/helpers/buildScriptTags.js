@@ -1,7 +1,7 @@
 /**
  * @import {GAController} from './typeDefs'
  */
- 
+
 import { buildContentScript } from './buildContentScript'
 
 /**

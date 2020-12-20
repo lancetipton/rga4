@@ -13,7 +13,7 @@ import { GAController } from '../ga4/GAController'
  *
  * @returns {void}
  */
-const isInitialized = (options) => {
+const isInitialized = options => {
   const rga4 = GAController.getInstance()
   rga4 && rga4.pageView(options)
 }
@@ -31,8 +31,7 @@ const isInitialized = (options) => {
  */
 const initializeGA4 = ({ gaCode, ...options }) => {
   const GA4Instance = new GAController(gaCode)
-  GA4Instance
-    .initialize()
+  GA4Instance.initialize()
     .then(rga4 => {
       rga4.pageView(options)
     })

@@ -3,7 +3,7 @@ import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import cleanup from 'rollup-plugin-cleanup'
 import sucrase from '@rollup/plugin-sucrase'
-import { terser } from "rollup-plugin-terser"
+import { terser } from 'rollup-plugin-terser'
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -42,14 +42,15 @@ export default {
     }),
     commonjs(),
     sucrase({
-      transforms: [ 'jsx', 'flow' ],
+      transforms: ['jsx', 'flow'],
     }),
-    isProd && terser({
-      mangle: {
-        keep_fnames: true,
-        keep_classnames: true,
-      }
-    }),
+    isProd &&
+      terser({
+        mangle: {
+          keep_fnames: true,
+          keep_classnames: true,
+        },
+      }),
     cleanup(),
-  ]
+  ],
 }

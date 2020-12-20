@@ -15,7 +15,9 @@ import { mapEventKeys } from '../helpers/mapEventKeys'
  */
 const noOpOverride = override => {
   return () => {
-    console.error(`Method ${override} should be overwritten with GAController instance method!`)
+    console.error(
+      `Method ${override} should be overwritten with GAController instance method!`
+    )
   }
 }
 

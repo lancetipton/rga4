@@ -3,7 +3,6 @@
  * @import {Component} from './typeDefs'
  */
 
-
 import React, { useState } from 'react'
 import { useRGA4 } from '../hooks/useRGA4'
 
