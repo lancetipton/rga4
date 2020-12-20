@@ -27,6 +27,8 @@
     "deploy": "yarn build && yarn docs:build && gh-pages -d docs",
     "dev": "nodemon --watch ./configs --exec 'NODE_ENV=production rollup -c ./configs/rollup.config.js -w'",
     "docs:build": "rimraf ./docs && ./node_modules/.bin/jsdoc -c ./configs/jsdoc.json -R README.md",
+    "docs:serve": "cd ./docs && serve .",
+    "docs": "yarn docs:build && yarn docs:serve",
     "format": "yarn pretty",
     "pretty": "./node_modules/.bin/prettier --config ./configs/prettier.config.js --write '**/*.{js,jsx}'",
     "start": "yarn dev",
@@ -63,5 +65,8 @@
   },
   "peerDependencies": {
     "react": "16.13.1"
+  },
+  "dependencies": {
+    "serve": "^11.3.2"
   }
 }

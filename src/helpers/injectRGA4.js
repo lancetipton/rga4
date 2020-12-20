@@ -1,5 +1,4 @@
 /**
- * @module Helpers
  * @import {Component} from './typeDefs'
  */
  
@@ -16,7 +15,6 @@ import {
  * Loops over the passed in children, and checks if they are valid React components
  * <br/> If they are, then the GA4Singleton is injected into their props
  * @function
- * @memberof Helpers
  * @private
  * @export
  * @param {Component|Component[]} children - React children prop

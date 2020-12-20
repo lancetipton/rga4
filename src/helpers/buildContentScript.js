@@ -1,5 +1,4 @@
 /**
- * @module Helpers
  * @import {GAController} from './typeDefs'
  */
 
@@ -7,7 +6,6 @@
  * Generates the code needed to initialize google analytics 4
  * <br/> Taken from https://developers.google.com/analytics/devguides/collection/ga4
  * @function
- * @memberof Helpers
  * @private
  * @param {GAController} GA4Instance - Instance of the GAController class
  *
@@ -25,7 +23,6 @@ const getScriptContent = GA4Instance => `
 /**
  * Builds the code to be used as the Inner HTML content for the GTag Script Dom element
  * @function
- * @memberof Helpers
  * @private
  * @param {GAController} GA4Instance - Instance of the GAController class
  *
@@ -46,8 +43,8 @@ const buildScriptContent = GA4Instance => {
  * Builds a script dom node that initializes gtag
  * <br/> Initialization code taken from https://developers.google.com/analytics/devguides/collection/ga4
  * @function
- * @memberof Helpers
  * @export
+ * @private
  * @param {GAController} GA4Instance - Instance of the GAController class
  * @param {Object} head - Current documents Head Dom element
  *

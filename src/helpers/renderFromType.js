@@ -1,5 +1,4 @@
 /**
- * @module Helpers
  * @import {Component} from './typeDefs'
  */
 
@@ -8,7 +7,6 @@ import React, { createElement, Fragment, isValidElement } from 'react'
 /**
  * Renders the passed in component based it's type
  * @function
- * @memberof Helpers
  * @private
  * @export
  * @param {Component} Component - Component to be rendered

@@ -1,47 +1,18 @@
 /**
- * @module GAController
- * @import {GAController, GA4Singleton, PageViewEvent, UAEvent} from './typeDefs'
+ * @import {GA4Singleton, PageViewEvent, UAEvent} from '../typeDefs'
  */
 
-import { buildScriptTags } from './helpers/buildScriptTags'
-import { mapEventKeys } from './helpers/mapEventKeys'
+import { buildScriptTags } from '../helpers/buildScriptTags'
+import { mapEventKeys } from '../helpers/mapEventKeys'
+import { GA4Singleton } from './GA4Singleton'
 
 /**
- * Sets the singleton to initialized, and adds methods
- * @memberof GAController
- * @function
- * @private
- * @param {string} override - Name of method that should be overwritten
- *
- * @returns {function} - Method to log an override error
- */
-const noOpOverride = override => {
-  return () => {
-    console.error(`Method ${override} should be overwritten with GAController instance method!`)
-  }
-}
-
-/**
- * @type {GA4Singleton}
- * @export
- */
-export const GA4Singleton = {
-  initialized: false,
-  gtag: noOpOverride('GAController#gtag'),
-  uaEvent: noOpOverride('GAController#uaEvent'),
-  pageview: noOpOverride('GAController#pageview'),
-  event: noOpOverride('GAController#event'),
-}
-
-/**
- * @type GAController
  * @class GAController
  * @desc Class required to manage google analytics 4
  * @export
  * @param {string} gaCode - Google Analytic 4 Measurement ID
  * @param {string} [options={}] - Custom analytic config options
  * @param {string} options.gaCodes - Additional Measurement IDs
- * @private
  *
  * @returns {GAController} GAController instance
  */
@@ -66,9 +37,9 @@ export class GAController {
   setSingleton = () => {
     Object.assign(GA4Singleton, {
       initialized: true,
-      pageview: this.pageview,
+      pageView: this.pageView,
+      uaEvent: this.uaEvent,
       event: this.event,
-      customEvent: this.customEvent,
       gtag: this.gtag,
     })
 

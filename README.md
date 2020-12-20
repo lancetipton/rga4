@@ -1,5 +1,5 @@
 # RGA4
- * React Components and hooks for integrating Google Analytics 4 into an application
+React Components and hooks for integrating Google Analytics 4 into an application
 
 ### Add / Install
 
@@ -8,14 +8,14 @@
   npm install @lancetipton/rga4
 ```
 
-### Setup
+## Setup
 
 **Important**
 * A Google Analytic 4 Measurement ID is required
 * See this [page for more information](https://support.google.com/analytics/answer/9306384?visit_id=637436678402332999-753716772&rd=1)
 
 
-### Example
+## Example
 
   ```javascript
     import React, { useEffect } from 'react'
@@ -51,7 +51,3 @@
       )
     }
   ```
-
-### API
-
- * Coming Soon...

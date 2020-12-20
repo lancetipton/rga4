@@ -11,7 +11,6 @@ import { useRGA4Initialize } from '../hooks/useRGA4Initialize'
  * @desc Helper component to initialize google analytics 4
  * <br/> It also injects the GA4Singleton into the passed in react children
  * @function
- * @memberof Components
  * @export
  * @param {Object} props - Data to initialize Google Analytic 4
  * @param {string} props.code - Main Google Analytic Measurement ID
