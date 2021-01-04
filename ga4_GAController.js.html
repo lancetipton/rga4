@@ -27,7 +27,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="GAController.html">GAController</a><ul class='methods'><li data-type='method'><a href="GAController.html#.getInstance">getInstance</a></li><li data-type='method'><a href="GAController.html#.isInitialized">isInitialized</a></li><li data-type='method'><a href="GAController.html#event">event</a></li><li data-type='method'><a href="GAController.html#ga">ga</a></li><li data-type='method'><a href="GAController.html#gtag">gtag</a></li><li data-type='method'><a href="GAController.html#initialize">initialize</a></li><li data-type='method'><a href="GAController.html#pageView">pageView</a></li><li data-type='method'><a href="GAController.html#setSingleton">setSingleton</a></li><li data-type='method'><a href="GAController.html#uaEvent">uaEvent</a></li></ul></li></ul><h3>Modules</h3><ul><li><a href="module-Components.html">Components</a><ul class='methods'><li data-type='method'><a href="module-Components.html#.RGA4">RGA4</a></li><li data-type='method'><a href="module-Components.html#.RGA4Injector">RGA4Injector</a></li></ul></li><li></li><li><a href="module-HOCs.html">HOCs</a><ul class='methods'><li data-type='method'><a href="module-HOCs.html#.withPageView">withPageView</a></li><li data-type='method'><a href="module-HOCs.html#.withRGA4">withRGA4</a></li></ul></li><li></li><li><a href="module-Hooks.html">Hooks</a><ul class='methods'><li data-type='method'><a href="module-Hooks.html#.usePageView">usePageView</a></li><li data-type='method'><a href="module-Hooks.html#.useRGA4">useRGA4</a></li></ul></li><li></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="GAController.html">GAController</a><ul class='methods'><li data-type='method'><a href="GAController.html#event">event</a></li><li data-type='method'><a href="GAController.html#ga">ga</a></li><li data-type='method'><a href="GAController.html#gtag">gtag</a></li><li data-type='method'><a href="GAController.html#pageView">pageView</a></li><li data-type='method'><a href="GAController.html#uaEvent">uaEvent</a></li></ul></li></ul><h3>Modules</h3><ul><li><a href="module-Context.html">Context</a><ul class='methods'><li data-type='method'><a href="module-Context.html#~RGA4Provider">RGA4Provider</a></li></ul></li><li><a href="module-HOCs.html">HOCs</a><ul class='methods'><li data-type='method'><a href="module-HOCs.html#.withRGA4">withRGA4</a></li></ul></li><li><a href="module-Hooks.html">Hooks</a><ul class='methods'><li data-type='method'><a href="module-Hooks.html#.useRGA4">useRGA4</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -43,7 +43,7 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @import {GA4Singleton, PageViewEvent, UAEvent} from '../typeDefs'
+ * @import {GA4Singleton, PageViewEvent, UAEvent} from '../../index.d.ts'
  */
 
 import { buildScriptTags } from '../helpers/buildScriptTags'
@@ -74,16 +74,16 @@ export class GAController {
    * @memberof GAController
    * @instance
    * @function
-   *
+   * @private
    * @returns {Object} GA4Singleton
    */
   setSingleton = () => {
     Object.assign(GA4Singleton, {
       initialized: true,
-      pageView: this.pageView,
-      uaEvent: this.uaEvent,
-      event: this.event,
-      gtag: this.gtag,
+      pageView: this.pageView.bind(this),
+      uaEvent: this.uaEvent.bind(this),
+      event: this.event.bind(this),
+      gtag: this.gtag.bind(this),
     })
 
     return GA4Singleton
@@ -95,7 +95,7 @@ export class GAController {
    * @memberof GAController
    * @instance
    * @function
-   *
+   * @private
    * @returns {Class} GAController instance
    */
   initialize = () => {
@@ -143,11 +143,33 @@ export class GAController {
    * @memberof GAController
    * @instance
    * @param {string} name - What the event should be called
-   * @param {Object} props - Key/values pairs of properties of the event
+   * @param {object} props - Key/values pairs of properties of the event
+   *
+   * @example
+   * event({
+   *   name: 'Button Click',
+   *   time: new Date(),
+   *   user: 'anon',
+   * })
    *
    * @returns {*} Response from the global gtag method
    */
-  event = (name, props = {}) => {
+  event = (name, props) => {
+    // TODO: getting an odd error with typeof
+    // Can't use typeof name !== 'object' to validate the props
+    // Need to investigate
+
+    // Check if name is an object, which allows calling this method with just an object 
+    if(typeof name !== 'string' &amp;&amp; !props){
+      props = name
+      name = props.name
+      delete props.name
+    }
+
+    // Validate the arguments are correct, else show a warning
+    if(!name || typeof name !== 'string')
+      return console.warn(`Invalid event arguments. Action name and properties are required!`)
+
     return this.gtag('event', name, props)
   }
 
@@ -179,6 +201,7 @@ export class GAController {
  * @function
  * @memberof GAController
  * @static
+ * @private
  *
  * @returns {boolean} - True if google analytics is initialized
  */
@@ -190,8 +213,10 @@ GAController.isInitialized = () => {
  * Get RGA4 singleton instance if it's initialized
  * @function
  * @memberof GAController
+ * @private
  * @static
  * @param {boolean} showWarn - Show warning when singleton is not initialized
+ *
  * @returns {Object} - GA4Singleton
  */
 GAController.getInstance = showWarn => {
@@ -213,7 +238,7 @@ GAController.getInstance = showWarn => {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Sun Dec 20 2020 04:02:34 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Mon Jan 04 2021 03:45:56 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

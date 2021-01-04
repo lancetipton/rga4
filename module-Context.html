@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>HOCs - Documentation</title>
+    <title>Context - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">HOCs</h1>
+    <h1 class="page-title">Context</h1>
     
 
     
@@ -81,7 +81,7 @@
 
     
 
-    <h4 class="name" id=".withRGA4"><span class="type-signature">(static) </span>withRGA4<span class="signature">(props)</span><span class="type-signature"> &rarr; {function}</span></h4>
+    <h4 class="name" id="~RGA4Provider"><span class="type-signature">(inner) </span>RGA4Provider<span class="signature">(props)</span><span class="type-signature"> &rarr; {Component|Object}</span></h4>
 
     
 
@@ -93,7 +93,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="hocs_withRGA4.js.html">hocs/withRGA4.js</a>, <a href="hocs_withRGA4.js.html#line24">line 24</a>
+        <a href="context_rga4Provider.js.html">context/rga4Provider.js</a>, <a href="context_rga4Provider.js.html#line27">line 27</a>
     </li></ul></dd>
     
 
@@ -133,7 +133,7 @@
 
 
 <div class="description usertext">
-    <p>Higher order component to initialized GA4, then automatically fire a page view event</p>
+    <p>Context Provider used to set the Goggle Analytics Context.</p>
 </div>
 
 
@@ -146,12 +146,15 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>const Component = props => {
- const rga4 = props.rga4
- return (&lt;div>{rga4.initialized}&lt;/div>)
+    <pre class="prettyprint"><code>const App = () => {
+  return (
+    &lt;RGA4Provider code={'Measurement-ID'} config={{ debug: true }} >
+       &lt;EvfSessions />
+    &lt;/RGA4Provider>
+  )
 }
 
-export const RGA4Component = withRGA4(Component)</code></pre>
+export default App</code></pre>
 
 
 
@@ -197,7 +200,7 @@ export const RGA4Component = withRGA4(Component)</code></pre>
 
             
 
-            <td class="description last"><p>Data for the page view event</p>
+            <td class="description last"><p>RGA4 provider props</p>
                 <h6>Properties</h6>
                 
 
@@ -223,13 +226,16 @@ export const RGA4Component = withRGA4(Component)</code></pre>
 
         <tr>
             
-                <td class="name"><code>location</code></td>
+                <td class="name"><code>children</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Object</span>
+|
+
+<span class="param-type">Array</span>
 
 
             
@@ -239,14 +245,14 @@ export const RGA4Component = withRGA4(Component)</code></pre>
 
             
 
-            <td class="description last"><p>Current page location</p></td>
+            <td class="description last"><p>Child components to wrap the with theme provider</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>title</code></td>
+                <td class="name"><code>code</code></td>
             
 
             <td class="type">
@@ -262,20 +268,20 @@ export const RGA4Component = withRGA4(Component)</code></pre>
 
             
 
-            <td class="description last"><p>Current page title</p></td>
+            <td class="description last"><p>Google Analytics measurement ID to use for tracking</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>gaCode</code></td>
+                <td class="name"><code>config</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Object</span>
 
 
             
@@ -285,7 +291,30 @@ export const RGA4Component = withRGA4(Component)</code></pre>
 
             
 
-            <td class="description last"><p>Google Analytic Measurement ID</p></td>
+            <td class="description last"><p>Custom Google Analytics config</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>gaCodes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Extra google analytics</p></td>
         </tr>
 
     
@@ -319,7 +348,7 @@ export const RGA4Component = withRGA4(Component)</code></pre>
         
 <div class="param-desc">
     <ul>
-<li>HOC Wrapper around the passed int component</li>
+<li>RGA4Provider.Provider - Provides RGA4 Singleton to the consumer</li>
 </ul>
 </div>
 
@@ -331,7 +360,10 @@ export const RGA4Component = withRGA4(Component)</code></pre>
     </dt>
     <dd>
         
-<span class="param-type">function</span>
+<span class="param-type">Component</span>
+|
+
+<span class="param-type">Object</span>
 
 
     </dd>

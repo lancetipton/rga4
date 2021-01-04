@@ -27,7 +27,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="GAController.html">GAController</a><ul class='methods'><li data-type='method'><a href="GAController.html#.getInstance">getInstance</a></li><li data-type='method'><a href="GAController.html#.isInitialized">isInitialized</a></li><li data-type='method'><a href="GAController.html#event">event</a></li><li data-type='method'><a href="GAController.html#ga">ga</a></li><li data-type='method'><a href="GAController.html#gtag">gtag</a></li><li data-type='method'><a href="GAController.html#initialize">initialize</a></li><li data-type='method'><a href="GAController.html#pageView">pageView</a></li><li data-type='method'><a href="GAController.html#setSingleton">setSingleton</a></li><li data-type='method'><a href="GAController.html#uaEvent">uaEvent</a></li></ul></li></ul><h3>Modules</h3><ul><li><a href="module-Components.html">Components</a><ul class='methods'><li data-type='method'><a href="module-Components.html#.RGA4">RGA4</a></li><li data-type='method'><a href="module-Components.html#.RGA4Injector">RGA4Injector</a></li></ul></li><li></li><li><a href="module-HOCs.html">HOCs</a><ul class='methods'><li data-type='method'><a href="module-HOCs.html#.withPageView">withPageView</a></li><li data-type='method'><a href="module-HOCs.html#.withRGA4">withRGA4</a></li></ul></li><li></li><li><a href="module-Hooks.html">Hooks</a><ul class='methods'><li data-type='method'><a href="module-Hooks.html#.usePageView">usePageView</a></li><li data-type='method'><a href="module-Hooks.html#.useRGA4">useRGA4</a></li></ul></li><li></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="GAController.html">GAController</a><ul class='methods'><li data-type='method'><a href="GAController.html#event">event</a></li><li data-type='method'><a href="GAController.html#ga">ga</a></li><li data-type='method'><a href="GAController.html#gtag">gtag</a></li><li data-type='method'><a href="GAController.html#pageView">pageView</a></li><li data-type='method'><a href="GAController.html#uaEvent">uaEvent</a></li></ul></li></ul><h3>Modules</h3><ul><li><a href="module-Context.html">Context</a><ul class='methods'><li data-type='method'><a href="module-Context.html#~RGA4Provider">RGA4Provider</a></li></ul></li><li><a href="module-HOCs.html">HOCs</a><ul class='methods'><li data-type='method'><a href="module-HOCs.html#.withRGA4">withRGA4</a></li></ul></li><li><a href="module-Hooks.html">Hooks</a><ul class='methods'><li data-type='method'><a href="module-Hooks.html#.useRGA4">useRGA4</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -60,8 +60,8 @@
         <article><h1>RGA4</h1>
 <p>React Components and hooks for integrating Google Analytics 4 into an application</p>
 <h3>Add / Install</h3>
-<pre class="prettyprint source lang-js"><code>  yarn add @lancetipton/rga4
-  npm install @lancetipton/rga4
+<pre class="prettyprint source lang-js"><code>  yarn add @ltipton/rga4
+  npm install @ltipton/rga4
 </code></pre>
 <h2>Setup</h2>
 <p><strong>Important</strong></p>
@@ -70,26 +70,37 @@
 <li>See this <a href="https://support.google.com/analytics/answer/9306384?visit_id=637436678402332999-753716772&amp;rd=1">page for more information</a></li>
 </ul>
 <h2>Example</h2>
-<pre class="prettyprint source lang-javascript"><code>  import React, { useEffect } from 'react'
-  import { RGA4 } from '@lancetipton/rga4'
+<pre class="prettyprint source lang-javascript"><code>  import React, { useEffect, useCallback } from 'react'
+  import { RGA4Provider, useRGA4 } from '@ltipton/rga4'
 
-  const Child = ({ rga4, ...props }) => {
+  const Child = (props) => {
 
+    // Use the hook to get access to the Google Analytics Context
+    const rga4 = useRGA4()
+    
     useEffect(() => {
-
-      // Call an analytics events with the rga4 prop
+      // Call the rga4.event method to send an analytics event
       rga4.event('page_view', {
-        event_label: 'Github Readme',
-        event_category: 'engagement',
-        non_interaction: true,
+        label: 'Github Readme',
+        category: 'engagement',
       })
-
     }, [])
 
+    // Custom analytics event when a button is clicked
+    const onClick = useCallback(() => {
+      // Call the rga4.event method to send an analytics event
+      rga4.event('button_click', {
+        event_label: 'Demo Button',
+        event_category: 'engagement',
+      })
+    }, [ rga4 ])
+
     return (
-      &lt;View>
-        ...
-      &lt;/View>
+      &lt;div>
+        &lt;button onClick={onClick}>
+          Demo Analytics Event
+        &lt;/button>
+      &lt;/div>
     )
   }
 
@@ -97,9 +108,9 @@
     const measurementID = `Replace with your GA4 Measurement ID`
     
     return (
-      &lt;RGA4 code={measurementID}>
+      &lt;RGA4Provider code={measurementID}>
         &lt;Child />
-      &lt;/RGA4>
+      &lt;/RGA4Provider>
     )
   }
 </code></pre></article>
@@ -117,7 +128,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Sun Dec 20 2020 04:02:34 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Mon Jan 04 2021 03:45:56 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

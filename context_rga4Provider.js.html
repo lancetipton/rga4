@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>hooks/useRGA4.js - Documentation</title>
+    <title>context/rga4Provider.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">hooks/useRGA4.js</h1>
+    <h1 class="page-title">context/rga4Provider.js</h1>
     
 
     
@@ -42,26 +42,68 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/** @module Hooks */
-
-import { useContext } from 'react'
-import { RGA4Context } from '../context/rga4Context'
+            <pre class="prettyprint source linenums"><code>/** @module Context */
+ 
+import React, { useState, useEffect } from 'react'
+import { RGA4Context } from './rga4Context'
+import { GAController } from '../ga4/GAController'
 
 /**
- * Custom hook to get the RGA4 context
+ * Initializes GA4, then injects the GA4Singleton into the children's props
  * @function
- * @example
- * const rga4 = useRGA4()
- *
- * // Fire an analytics event
- * rga4.event('&lt;Event-Name>', { ...Analytic event properties })
+ * @private
+ * @param {Object} props - Data to initialize Google Analytic 4
+ * @param {string} props.code - Main Google Analytic Measurement ID
+ * @param {Object} props.config - Config options for gtag method call
+ * @param {Array} props.gaCodes - Extra GA4 Measurement ID's
+ * @param {Array|Object} props.children - Children who will have the GA4 Singleton injected into their props
+ * @param {function} setChildren - callback to update the passed in props.children
  *
  * @returns {void}
  */
-export const useRGA4 = () => {
-  return useContext(RGA4Context)
+const initializeGA4 = async (props, setRGA4) => {
+  const { code, config, gaCodes } = props
+  const GA4Instance = new GAController(`${code}`, config, gaCodes)
+  const rga4 = await GA4Instance.initialize()
+  setRGA4(rga4)
 }
-</code></pre>
+
+/**
+ * @typedef RGA4Provider
+ * @desc Context Provider used to set the Goggle Analytics Context.
+ * @function
+ * @param {Object} props - RGA4 provider props
+ * @param {Object|Array} props.children - Child components to wrap the with theme provider
+ * @param {string} props.code - Google Analytics measurement ID to use for tracking
+ * @param {Object} props.config - Custom Google Analytics config
+ * @param {boolean} props.gaCodes - Extra google analytics
+ * @export
+ * @example
+ * const App = () => {
+ *   return (
+ *     &lt;RGA4Provider code={'Measurement-ID'} config={{ debug: true }} >
+ *        &lt;EvfSessions />
+ *     &lt;/RGA4Provider>
+ *   )
+ * }
+ *
+ * export default App
+ *
+ * @returns {Component|Object} - RGA4Provider.Provider - Provides RGA4 Singleton to the consumer
+ */
+export const RGA4Provider = ({ children, ...props }) => {
+  const [rga4, setRGA4] = useState(GAController.getInstance())
+
+  useEffect(() => {
+    !GAController.isInitialized() &amp;&amp; initializeGA4(props, setRGA4)
+  }, [props, rga4, setRGA4])
+
+  return (
+    &lt;RGA4Context.Provider value={rga4}>
+      { children }
+    &lt;/RGA4Context.Provider>
+  )
+} </code></pre>
         </article>
     </section>
 
