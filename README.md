@@ -4,8 +4,8 @@ React Components and hooks for integrating Google Analytics 4 into an applicatio
 ### Add / Install
 
 ```js
-  yarn add @lancetipton/rga4
-  npm install @lancetipton/rga4
+  yarn add @ltipton/rga4
+  npm install @ltipton/rga4
 ```
 
 ## Setup
@@ -19,7 +19,7 @@ React Components and hooks for integrating Google Analytics 4 into an applicatio
 
   ```javascript
     import React, { useEffect } from 'react'
-    import { RGA4 } from '@lancetipton/rga4'
+    import { RGA4 } from '@ltipton/rga4'
 
     const Child = ({ rga4, ...props }) => {
 

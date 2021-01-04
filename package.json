@@ -1,5 +1,5 @@
 {
-  "name": "@lancetipton/rga4",
+  "name": "@ltipton/rga4",
   "version": "0.0.1",
   "description": "React Components and hooks for integrating Google Analytics 4 into an application",
   "repository": "https://github.com/lancetipton/rga4.git",
@@ -18,6 +18,10 @@
   "files": [
     "build/*"
   ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/",
+    "access": "public"
+  },
   "scripts": {
     "build": "yarn clean:build; NODE_ENV=production rollup -c ./configs/rollup.config.js",
     "clean:build": "rimraf build",
