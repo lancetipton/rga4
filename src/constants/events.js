@@ -10,7 +10,7 @@
  * @readonly
  * @private
  */
-export const EVENT_MAP = Object.freeze({
+const EVENT_MAP = {
   /**
    * @type PageViewEvent
    * @constant
@@ -39,4 +39,26 @@ export const EVENT_MAP = Object.freeze({
     category: 'event_category',
     nonInteraction: 'non_interaction',
   }),
-})
+}
+
+/**
+ * Gets the Event Map Object with predefined events
+ * @function
+ * @export
+ *
+ * @returns {Object} - EVENT_MAP constant
+ */
+export const getEventMap = () => {
+  return Object.freeze(EVENT_MAP)
+}
+
+/**
+ * Adds custom events to the Event Map
+ * @function
+ * @export
+ *
+ * @returns {void}
+ */
+export const setEventMap = events => {
+  Object.assign(EVENT_MAP, events || {})
+}

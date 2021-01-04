@@ -1,4 +1,4 @@
-import { EVENT_MAP } from '../constants/events'
+import { getEventMap } from '../constants/events'
 
 /**
  * @object
@@ -16,6 +16,8 @@ const noOpObj = {}
  * @returns {*} Response from the global gtag method
  */
 const getEventKeyMap = (eventKeyMap) => {
+  const EVENT_MAP = getEventMap()
+
   return typeof eventKeyMap === 'string'
     ? EVENT_MAP[eventKeyMap]
     : eventKeyMap

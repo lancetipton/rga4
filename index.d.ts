@@ -37,10 +37,12 @@
  */
 
 /**
- * @typedef Component
- * @desc A valid React Component
- * @property {Object} [props] - Data used to render the component
- * @property {string|number} [props.key] - Unique identifier of the component relative to it's parent
- * @property {Object|Array|string} [props.children] - Child components of the React component
- * @property {Object|function} [ref] - React.Ref object or function for accessing the Native element
+ * @typedef RGA4Provider
+ * @desc Context Provider used to set the Goggle Analytics Context.
+ * @function
+ * @param {Object} props - RGA4 provider props
+ * @param {Object|Array} props.children - Child components to wrap the with theme provider
+ * @param {string} props.code - Google Analytics measurement ID to use for tracking
+ * @param {Object} props.config - Custom Google Analytics config
+ * @param {boolean} props.gaCodes - Extra google analytics
  */

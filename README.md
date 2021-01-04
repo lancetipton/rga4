@@ -18,26 +18,37 @@ React Components and hooks for integrating Google Analytics 4 into an applicatio
 ## Example
 
   ```javascript
-    import React, { useEffect } from 'react'
-    import { RGA4 } from '@ltipton/rga4'
+    import React, { useEffect, useCallback } from 'react'
+    import { RGA4Provider, useRGA4 } from '@ltipton/rga4'
 
-    const Child = ({ rga4, ...props }) => {
+    const Child = (props) => {
 
+      // Use the hook to get access to the Google Analytics Context
+      const rga4 = useRGA4()
+      
       useEffect(() => {
-
-        // Call an analytics events with the rga4 prop
+        // Call the rga4.event method to send an analytics event
         rga4.event('page_view', {
-          event_label: 'Github Readme',
-          event_category: 'engagement',
-          non_interaction: true,
+          label: 'Github Readme',
+          category: 'engagement',
         })
-
       }, [])
 
+      // Custom analytics event when a button is clicked
+      const onClick = useCallback(() => {
+        // Call the rga4.event method to send an analytics event
+        rga4.event('button_click', {
+          event_label: 'Demo Button',
+          event_category: 'engagement',
+        })
+      }, [ rga4 ])
+
       return (
-        <View>
-          ...
-        </View>
+        <div>
+          <button onClick={onClick}>
+            Demo Analytics Event
+          </button>
+        </div>
       )
     }
 
@@ -45,9 +56,9 @@ React Components and hooks for integrating Google Analytics 4 into an applicatio
       const measurementID = `Replace with your GA4 Measurement ID`
       
       return (
-        <RGA4 code={measurementID}>
+        <RGA4Provider code={measurementID}>
           <Child />
-        </RGA4>
+        </RGA4Provider>
       )
     }
   ```

@@ -1,4 +1,8 @@
-import React, { useState, useMemo, useEffect } from 'react'
+/**
+ * @import {RGA4Provider} from './../index.d.ts'
+ */
+ 
+import React, { useState, useEffect } from 'react'
 import { RGA4Context } from './rga4Context'
 import { GAController } from '../ga4/GAController'
 
@@ -22,6 +26,11 @@ const initializeGA4 = async (props, setRGA4) => {
   setRGA4(rga4)
 }
 
+/**
+ * @type {RGA4Provider}
+ * @export
+ * @returns {Component|Object} - RGA4Provider.Provider - Provides RGA4 Singleton to the consumer
+ */
 export const RGA4Provider = ({ children, ...props }) => {
   const [rga4, setRGA4] = useState(GAController.getInstance())
 

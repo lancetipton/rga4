@@ -3,7 +3,6 @@
  */
 
 import { buildScriptTags } from '../helpers/buildScriptTags'
-import { mapEventKeys } from '../helpers/mapEventKeys'
 
 /**
  * Sets the singleton to initialized, and adds methods

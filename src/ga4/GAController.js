@@ -36,10 +36,10 @@ export class GAController {
   setSingleton = () => {
     Object.assign(GA4Singleton, {
       initialized: true,
-      pageView: this.pageView,
-      uaEvent: this.uaEvent,
-      event: this.event,
-      gtag: this.gtag,
+      pageView: this.pageView.bind(this),
+      uaEvent: this.uaEvent.bind(this),
+      event: this.event.bind(this),
+      gtag: this.gtag.bind(this),
     })
 
     return GA4Singleton
@@ -99,11 +99,26 @@ export class GAController {
    * @memberof GAController
    * @instance
    * @param {string} name - What the event should be called
-   * @param {Object} props - Key/values pairs of properties of the event
+   * @param {object} props - Key/values pairs of properties of the event
    *
    * @returns {*} Response from the global gtag method
    */
-  event = (name, props = {}) => {
+  event = (name, props) => {
+    // TODO: getting an odd error with typeof
+    // Can't use typeof name !== 'object' to validate the props
+    // Need to investigate
+
+    // Check if name is an object, which allows calling this method with just an object 
+    if(typeof name !== 'string' && !props){
+      props = name
+      name = props.name
+      delete props.name
+    }
+
+    // Validate the arguments are correct, else show a warning
+    if(!name || typeof name !== 'string')
+      return console.warn(`Invalid event arguments. Action name and properties are required!`)
+
     return this.gtag('event', name, props)
   }
 
