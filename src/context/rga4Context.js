@@ -1,5 +1,5 @@
-import { createContext } from 'react'
 
+import { createContext } from 'react'
 /**
  * Creates the initial Google Analytics 4 context
  * @object

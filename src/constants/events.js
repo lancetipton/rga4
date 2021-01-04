@@ -45,7 +45,7 @@ const EVENT_MAP = {
  * Gets the Event Map Object with predefined events
  * @function
  * @export
- *
+ * @private
  * @returns {Object} - EVENT_MAP constant
  */
 export const getEventMap = () => {
@@ -56,7 +56,7 @@ export const getEventMap = () => {
  * Adds custom events to the Event Map
  * @function
  * @export
- *
+ * @private
  * @returns {void}
  */
 export const setEventMap = events => {

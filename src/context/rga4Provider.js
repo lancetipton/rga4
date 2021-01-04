@@ -1,6 +1,4 @@
-/**
- * @import {RGA4Provider} from './../index.d.ts'
- */
+/** @module Context */
  
 import React, { useState, useEffect } from 'react'
 import { RGA4Context } from './rga4Context'
@@ -27,8 +25,26 @@ const initializeGA4 = async (props, setRGA4) => {
 }
 
 /**
- * @type {RGA4Provider}
+ * @typedef RGA4Provider
+ * @desc Context Provider used to set the Goggle Analytics Context.
+ * @function
+ * @param {Object} props - RGA4 provider props
+ * @param {Object|Array} props.children - Child components to wrap the with theme provider
+ * @param {string} props.code - Google Analytics measurement ID to use for tracking
+ * @param {Object} props.config - Custom Google Analytics config
+ * @param {boolean} props.gaCodes - Extra google analytics
  * @export
+ * @example
+ * const App = () => {
+ *   return (
+ *     <RGA4Provider code={'Measurement-ID'} config={{ debug: true }} >
+ *        <EvfSessions />
+ *     </RGA4Provider>
+ *   )
+ * }
+ *
+ * export default App
+ *
  * @returns {Component|Object} - RGA4Provider.Provider - Provides RGA4 Singleton to the consumer
  */
 export const RGA4Provider = ({ children, ...props }) => {
