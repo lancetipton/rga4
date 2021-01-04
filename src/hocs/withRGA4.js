@@ -17,14 +17,13 @@ import { useRGA4 } from '../hooks/useRGA4'
  *  return (<div>{rga4.initialized}</div>)
  * }
  *
- * export const PageViewComponent = withPageView(Component)
+ * export const RGA4Component = withRGA4(Component)
  *
  * @returns {function} - HOC Wrapper around the passed int component
  */
 export const withRGA4 = Component => {
   const RGA4Hoc = props => {
-    const { gaCode } = props
-    const rga4 = useRGA4({ gaCode })
+    const rga4 = useRGA4()
 
     return <Component {...props} rga4={rga4} />
   }

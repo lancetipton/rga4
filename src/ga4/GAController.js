@@ -1,5 +1,5 @@
 /**
- * @import {GA4Singleton, PageViewEvent, UAEvent} from '../typeDefs'
+ * @import {GA4Singleton, PageViewEvent, UAEvent} from '../../index.d.ts'
  */
 
 import { buildScriptTags } from '../helpers/buildScriptTags'

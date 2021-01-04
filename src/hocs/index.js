@@ -1,1 +1,1 @@
-export * from './withPageView'
+export * from './withRGA4'

@@ -1,5 +1,5 @@
 /**
- * @import {GAController} from './typeDefs'
+ * @import {GAController} from './../index.d.ts'
  */
 
 /**

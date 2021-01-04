@@ -1,5 +1,5 @@
 /**
- * @import {GA4Singleton} from '../typeDefs'
+ * @import {GA4Singleton} from '../../index.d.ts'
  */
 
 import { buildScriptTags } from '../helpers/buildScriptTags'

@@ -1,5 +1,5 @@
 /**
- * @import {GAController} from './typeDefs'
+ * @import {GAController} from './../index.d.ts'
  */
 
 import { buildContentScript } from './buildContentScript'
@@ -76,7 +76,21 @@ const buildOnErrorEvent = reject => {
 const addScriptEvents = (GA4Instance, GAScript, head, resolve, reject) => {
   GAScript.onload = buildOnloadEvent(GA4Instance, head, resolve)
   GAScript.onerror = buildOnErrorEvent(reject)
+  
+  return GAScript
 }
+
+/**
+ * Checks if the document is ready
+ * @function
+ * @private
+ *
+ * @return {boolean} - Ready state of the document
+ */
+const isDocReady = () => (
+  document.readyState === 'complete' ||
+    document.readyState === 'interactive'
+)
 
 /**
  * Adds listener to the document.readyState
@@ -89,9 +103,11 @@ const addScriptEvents = (GA4Instance, GAScript, head, resolve, reject) => {
  * @returns {void}
  */
 const addOnReadyEvent = (GAScript, head) => {
-  document.onreadystatechange = function () {
-    document.readyState === 'interactive' && head.appendChild(GAScript)
-  }
+  isDocReady()
+    ? head.appendChild(GAScript)
+    : document.onreadystatechange = function () {
+        isDocReady() && head.appendChild(GAScript)
+      }
 }
 
 /**

@@ -1,5 +1,5 @@
 /**
- * @import {PageViewEvent, UAEvent} from './typeDefs'
+ * @import {PageViewEvent, UAEvent} from './../index.d.ts'
  */
 
 /**
