@@ -1,5 +1,5 @@
 # RGA4
-React Components and hooks for integrating Google Analytics 4 into an application
+React context and hooks for integrating Google Analytics 4 into an application
 
 ### Add / Install
 
