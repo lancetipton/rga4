@@ -35,3 +35,14 @@
  * @property {function} isInitialized - Checks if Google Analytic 4 has been initialized
  * @property {function} getInstance - Returns the GA4Singleton if it's been initialized
  */
+
+/**
+ * @typedef RGA4Provider
+ * @desc Context Provider used to set the Goggle Analytics Context.
+ * @function
+ * @param {Object} props - RGA4 provider props
+ * @param {*} props.children - React Child components to wrap the with theme provider
+ * @param {string} props.code - Google Analytics measurement ID to use for tracking
+ * @param {Object} [props.config] - Custom Google Analytics config
+ * @param {String[]} [props.gaCodes] - Extra google analytics
+ */

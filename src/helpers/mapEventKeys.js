@@ -15,12 +15,10 @@ const noOpObj = {}
  *
  * @returns {*} Response from the global gtag method
  */
-const getEventKeyMap = (eventKeyMap) => {
+const getEventKeyMap = eventKeyMap => {
   const EVENT_MAP = getEventMap()
 
-  return typeof eventKeyMap === 'string'
-    ? EVENT_MAP[eventKeyMap]
-    : eventKeyMap
+  return typeof eventKeyMap === 'string' ? EVENT_MAP[eventKeyMap] : eventKeyMap
 }
 
 /**

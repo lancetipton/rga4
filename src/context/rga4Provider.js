@@ -1,5 +1,5 @@
 /** @module Context */
- 
+
 import React, { useState, useEffect } from 'react'
 import { RGA4Context } from './rga4Context'
 import { GAController } from '../ga4/GAController'
@@ -19,7 +19,7 @@ import { GAController } from '../ga4/GAController'
  */
 const initializeGA4 = async (props, setRGA4) => {
   const { code, config, gaCodes } = props
-  const GA4Instance = new GAController(`${code}`, config, gaCodes)
+  const GA4Instance = new GAController(code, config, gaCodes)
   const rga4 = await GA4Instance.initialize()
   setRGA4(rga4)
 }
@@ -29,16 +29,19 @@ const initializeGA4 = async (props, setRGA4) => {
  * @desc Context Provider used to set the Goggle Analytics Context.
  * @function
  * @param {Object} props - RGA4 provider props
- * @param {Object|Array} props.children - Child components to wrap the with theme provider
+ * @param {*} props.children - React Child components to wrap the with theme provider
  * @param {string} props.code - Google Analytics measurement ID to use for tracking
- * @param {Object} props.config - Custom Google Analytics config
- * @param {boolean} props.gaCodes - Extra google analytics
+ * @param {Object} [props.config] - Custom Google Analytics config
+ * @param {String[]} [props.gaCodes] - Extra google analytics
  * @export
  * @example
  * const App = () => {
  *   return (
- *     <RGA4Provider code={'Measurement-ID'} config={{ debug: true }} >
- *        <EvfSessions />
+ *     <RGA4Provider
+ *       code={'Measurement-ID'}
+ *       config={{ debug: true }}
+ *     >
+ *        <App />
  *     </RGA4Provider>
  *   )
  * }
@@ -54,9 +57,5 @@ export const RGA4Provider = ({ children, ...props }) => {
     !GAController.isInitialized() && initializeGA4(props, setRGA4)
   }, [props, rga4, setRGA4])
 
-  return (
-    <RGA4Context.Provider value={rga4}>
-      { children }
-    </RGA4Context.Provider>
-  )
-} 
+  return <RGA4Context.Provider value={rga4}>{children}</RGA4Context.Provider>
+}

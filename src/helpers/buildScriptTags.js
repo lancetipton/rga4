@@ -76,7 +76,7 @@ const buildOnErrorEvent = reject => {
 const addScriptEvents = (GA4Instance, GAScript, head, resolve, reject) => {
   GAScript.onload = buildOnloadEvent(GA4Instance, head, resolve)
   GAScript.onerror = buildOnErrorEvent(reject)
-  
+
   return GAScript
 }
 
@@ -87,10 +87,8 @@ const addScriptEvents = (GA4Instance, GAScript, head, resolve, reject) => {
  *
  * @return {boolean} - Ready state of the document
  */
-const isDocReady = () => (
-  document.readyState === 'complete' ||
-    document.readyState === 'interactive'
-)
+const isDocReady = () =>
+  document.readyState === 'complete' || document.readyState === 'interactive'
 
 /**
  * Adds listener to the document.readyState
@@ -105,9 +103,9 @@ const isDocReady = () => (
 const addOnReadyEvent = (GAScript, head) => {
   isDocReady()
     ? head.appendChild(GAScript)
-    : document.onreadystatechange = function () {
+    : (document.onreadystatechange = function () {
         isDocReady() && head.appendChild(GAScript)
-      }
+      })
 }
 
 /**

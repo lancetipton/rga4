@@ -56,7 +56,11 @@ React context and hooks for integrating Google Analytics 4 into an application
       const measurementID = `Replace with your GA4 Measurement ID`
       
       return (
-        <RGA4Provider code={measurementID}>
+        <RGA4Provider
+          code={measurementID}
+          config={{ ...Optional gtag config object }}
+          gaCodes={[ ...Optional extra analytics IDs ]}
+        >
           <Child />
         </RGA4Provider>
       )

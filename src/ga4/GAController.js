@@ -12,13 +12,12 @@ import { GA4Singleton } from './GA4Singleton'
  * @export
  * @param {string} gaCode - Google Analytic 4 Measurement ID
  * @param {string} [options={}] - Custom analytic config options
- * @param {string} options.gaCodes - Additional Measurement IDs
+ * @param {Array} gaCodes - Additional Measurement IDs
  *
  * @returns {GAController} GAController instance
  */
 export class GAController {
-  constructor(gaCode, options = {}) {
-    const { gaCodes, ...config } = options
+  constructor(gaCode, config = {}, gaCodes = []) {
     this.config = config
     this.gaCode = gaCode
     this.extraGaCodes = gaCodes || []
@@ -31,7 +30,7 @@ export class GAController {
    * @instance
    * @function
    * @private
-   * @returns {Object} GA4Singleton
+   * @returns {GA4Singleton} GA4Singleton instance
    */
   setSingleton = () => {
     Object.assign(GA4Singleton, {
@@ -115,16 +114,18 @@ export class GAController {
     // Can't use typeof name !== 'object' to validate the props
     // Need to investigate
 
-    // Check if name is an object, which allows calling this method with just an object 
-    if(typeof name !== 'string' && !props){
+    // Check if name is an object, which allows calling this method with just an object
+    if (typeof name !== 'string' && !props) {
       props = name
       name = props.name
       delete props.name
     }
 
     // Validate the arguments are correct, else show a warning
-    if(!name || typeof name !== 'string')
-      return console.warn(`Invalid event arguments. Action name and properties are required!`)
+    if (!name || typeof name !== 'string')
+      return console.warn(
+        `Invalid event arguments. Action name and properties are required!`
+      )
 
     return this.gtag('event', name, props)
   }
