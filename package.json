@@ -1,6 +1,6 @@
 {
   "name": "@keg-hub/rga4",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "React Components and hooks for integrating Google Analytics 4 into an application",
   "repository": "https://github.com/lancetipton/rga4.git",
   "author": "lancetipton <lancetipton04@gmail.com>",
